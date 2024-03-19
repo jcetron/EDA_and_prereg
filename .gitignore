@@ -44,8 +44,9 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# pkgdown site
-docs/
+## we want to use docs/ to publish site, so removing this from ignores
+# # pkgdown site
+# docs/
 
 # translation temp files
 po/*~

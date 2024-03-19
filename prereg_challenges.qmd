@@ -1,0 +1,11 @@
+# Preregistration Challenges {#sec-prereg_challenges}
+
+Now that we've reviewed the research workflow with an eye to exploratory and confirmatory frameworks, let's look at some practical challenges to operating within this framework as a researcher. In the following sections of this tutorial, we'll discuss two of the most common challenges researchers face when working on a preregistration for a new experiment: deciding on a model specification in advance, and choosing an appropriate sample size for their study.
+
+Before we proceed with this discussion, however, it is important to issue the following disclaimer:
+
+**There are no easy, singular answers to many of the questions that arise around model specification and sample size estimation.**
+
+These tasks are challenging because they require you, the researcher, to make a lot of decisions and assumptions that you may be reluctant to make. These include decisions like, what covariates do you need to control for? What is the smallest effect size you are interested in? I must apologize in advance if you have come to this tutorial in search of ready-made answers to these questions. Unfortunately, no statistician or consultant can answer these questions for you, because they depend on your knowledge of the phenomenon you study---its formulation in prior literature, its relationships to other phenomena, and its properties as you understand and measure them.
+
+Consequently, there are very few broad, generalizable standards or "best practices" that can be applied to every analysis in order to justify the "correct" model specification or the "sufficient" sample size. Those general standards and formulas that do exist require many concessions in the form of assumptions and simplifications that may not be appropriate for your case. Navigating the landscape of "standard but unrealistically simplified" to "tailored but impractically complicated" practices is not easy, but the goal of this tutorial is to make it easier by offer you a kind of roadmap.

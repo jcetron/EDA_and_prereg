@@ -1,0 +1,45 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Preregistration and Exploratory Analysis"
+  author: "Joshua Cetron"
+  date: "last-modified"
+  page-navigation: true
+  search: true
+  favicon: images/favicon.png
+  chapters:
+    - index.qmd
+    - introduction.qmd
+    - part: research_processes.qmd
+      chapters:
+        - hypothesis_generation.qmd
+        - hypothesis_testing.qmd
+        - prediction.qmd
+    - part: prereg_challenges.qmd
+      chapters:
+        - model_spec.qmd
+        - sample_size.qmd
+#    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+# format:
+#   pdf:
+#     link-citations: true
+
+format:
+  html:
+    link-external-newwindow: true
+    link-citations: true
+    theme:
+      light: cosmo
+    code-link: true
+    callout-appearance: simple
+
+execute:
+  freeze: auto
+
+number-depth: 1

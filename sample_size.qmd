@@ -1,0 +1,90 @@
+---
+bibliography: references.bib
+---
+
+# Sample Size Estimation {#sec-sample_size}
+
+### How many participants do I need (and *why*)?
+
+*"What sample size do I need?"* is almost certainly the most common question new study planners will ask. And for good reason! You need to establish a planned sample size anytime you apply for a grant, complete a preregistration, and ultimately collect study data.
+
+And if you've ever asked this question, you have probably been met with the following response: "Do a power analysis to figure out what sample size you need!"
+
+Sounds easy enough, right?
+
+Well, if you made your way to this tutorial, it's probably because you found out that this is *not* as easy or simple as it sounds. But why is it such a challenge?
+
+First of all, just as with model specification, there are several considerations that can make sample size determination a difficult process to standardize. This is because there are actually many parts of an analysis that can be affected by sample size---statistical power is just one of them, and it is specifically related to hypothesis testing and inference.
+
+Other factors that can depend on sample size include the accuracy and stability of summary statistics [e.g., correlation coefficients, @schönbrodt2013] or parameter estimates in a statistical model [@maas2005]. And of course, there are practical constraints to sample sizes that we often have to accommodate regardless of statistical ideals, such as when access to a sample is costly or limited, or when a sample comes from a very small or very rare population (such as a patient population for a rare condition or disease). Unlike statistical power, the above factors are important considerations in both exploratory and confirmatory contexts, since they impact aspects of data analysis beyond just inferential testing.
+
+It is therefore important to expand our thinking about sample size beyond the scope of power analysis alone. Power analysis can be thought of as a special case of a larger sample size determination framework:
+
+-   Power analysis to deal with concerns about balancing false positive and false negative rates during statistical inference
+
+-   Estimation procedures to deal with the possibility of unstable or biased estimates due to insufficient data, especially in clustered data [see @maas2005]
+
+-   Sampling approaches to deal with practical limitations to sampling effectively
+
+Among these components, power analysis will often yield the largest minimum sample size requirement. By contrast, practical limitations to sampling (money, time, access) are often the greatest restrictions on potential sample size.
+
+Navigating these different pieces of the sample-size-estimation puzzle, especially for complex models, is *not* an exact science. Provide the best justification that you can for your estimated sample size, and preregister that number in advance so that you can preserve the integrity of your statistical inferences during analysis. Finally, remember that there are other ways of validating and increasing confidence in your results and your emergent theory of the phenomenon, such as by conducting replications and out-of-sample prediction analyses. You cannot and should not answer all of your research questions all the way in a single study or analysis!
+
+### A brief aside: Bayesian sample size estimation
+
+Although we remain primarily focused on frequentist analyses in this tutorial, it is worth taking a short detour to discuss a common question that arises among those doing Bayesian analyses: how do you determine sample sizes for Bayesian models?
+
+Even though the concept of statistical power is not compatible with the conditional probabilities estimated under Bayesian inference, the challenges of sample size estimation illustrated do not simply disappear under a Bayesian framework. There are still relationships between sample size and important properties of estimation that impact Bayesian models.
+
+However, implementing sample size considerations, especially for effects of interest, is further complicated in Bayesian modeling due to the heavily distributional nature of Bayesian models and their outputs. Unlike frequentist models, which only produce point-estimates of parameter values, Bayesian models yield posterior distributions for each parameter, creating a continuous range of possible inferential tests one can perform. As a result, there are more possible "effects" one can conceptualize for testing with Bayesian models, and therefore more scenarios one must plan for when anticipating the impact of sample size on estimation and inference.
+
+Consequently, Bayesian sample size estimation is even more difficult to standardize, which partly explains the difficulty of finding resources for how to do it. Generally, the process relies heavily on customized simulation analyses that you will likely have to design for yourself. For at least one illustration of how this can be done in practice, see [@chen2017].
+
+### Power analysis at last
+
+Now, finally, we can talk in detail about (frequentist) power analysis. We benefit from power analysis if we are doing confirmatory research where we have:
+
+-   a clear inferential hypothesis,
+
+-   a fully specified model,
+
+-   a clearly-defined effect size of interest,
+
+-   an inferential testing threshold (e.g., an $\alpha$ value of 0.05),
+
+-   a minimum power threshold (e.g., 80% power).
+
+If you have done power analyses in the past, you are likely familiar with the last three bullet points on that list. Since power analysis involves solving for a missing variable (in our case, sample size), it requires fixing other inferential testing variables in place: the effect size, the acceptable false positive rate (the "Type I error rate"), and the acceptable false negative rate (the "Type II error rate"). However, although the error rates are generally inherited from field standards of practice (generally an $\alpha$ value of 0.05 or 0.01 and a power value of 80% or 90%), the effect size is derived from our specific hypothesis test---making it dependent on our specific hypothesis and the model we use to test it. And, to complicate matters further, *we* have to decide, as the researchers, what value for that effect size would be meaningful to us.
+
+This is the hardest conceptual part of constructing a power analysis. It's not difficult to set our threshold for *statistical* significance in a power analysis---we can simply use our standard $\alpha$ threshold value. The difficulty is deciding on a threshold for *practical* significance.
+
+In the literature on power analysis, the practical significance threshold value is referred to with the acronym **SESOI**, which stands for "smallest effect size of interest." Just as with model specification and inferential question formation, the SESOI is something that *you*, the researcher, must decide upon. You might be able to source it from existing literature measuring similar effects, or from prior exploratory work of your own. Alternatively, if you have a practical, real-world quantity for an effect that would be meaningful for you to observe, you can construct your SESOI around that quantity.
+
+For example, suppose you study performance gaps in educational achievement due to socioeconomic factors, and you are testing the effectiveness of an intervention designed to close those gaps. You might base your SESOI around the effectiveness demonstrated of other interventions in the past, or a percentage of the performance gap that, if closed, would be expected to mitigate important downstream consequences that performance gaps tend to cause.
+
+One thing that you should ***not*** do when choosing an SESOI is re-use an effect size you've observed in a very small pilot sample. For one thing, as discussed above [and at length in @maas2005 and @schönbrodt2013], very small samples can yield unstable or biased estimates of effects, and therefore your SESOI could be anchored on an inaccurate expectation. But more importantly, defining an SESOI is inherently a *theoretical* task: it is the practical impact you think would matter to observe in your research. You can certainly use exploratory data to give you a realistic range of expectations for effect sizes your phenomenon of interest can reasonably yield, but this is not a substitute for thinking critically about what level of effect would make a difference for our broader understanding of the phenomenon in the world.
+
+### Power analysis for complex models
+
+Now armed with your clear inferential hypothesis, your specified model, your SESOI, and your Type I and Type II error rate thresholds, it is finally time to perform a power analysis. At this stage, the conceptual challenges are largely behind you, but procedural challenges remain. The biggest procedural challenge is deciding on the right method for implementing your power analysis. Namely, it is important to use an analysis method that is sufficiently sophisticated for the models you are preparing to use---models which, as discussed in the previous section, are often quite sophisticated themselves!
+
+Classical power analysis methods were developed for relatively simple inferential testing frameworks, such as *t*-tests, omnibus *F*-tests, and simple regression. However, most modern quantitative modeling work extends well beyond these frameworks, frequently involving advanced and complex regression models: the generalized linear model (GLM), the linear mixed-effects model (LMM; also called *multilevel* or *hierarchical* linear models), and even the generalized linear mixed-effects model (GLMM).
+
+Statistical power for advanced regression models---particularly mixed-effects models of any kind---is difficult to compute. The best methods for doing so involve *power simulations*, since these models are too complex for the analytic solutions available in the case of *t*-tests and other simpler models.
+
+The present tutorial is not itself a power simulation tutorial. But you can find a very thorough tutorial for performing power simulations on (generalized) linear mixed-effects models articulated in [this paper](https://doi.org/10.3758/s13428-021-01546-0) [@kumle2021] and their accompanying code notebooks (programmed in R), available [here](https://lkumle.github.io/power_notebooks/).
+
+&nbsp;
+
+::: {.border}
+[![](images/kumle_etal_2021_power.png)](https://doi.org/10.3758/s13428-021-01546-0)
+:::
+&nbsp;
+
+A particularly useful aspect of the Kumle, Võ, and Draschkow tutorial above is that it includes a specific example for models involving multiple crossed random effects, a common feature of models in psychology and cognitive science (e.g., for studies involving a set of participants each evaluating many stimulus items). In complex models, statistical power becomes sensitive to seemingly subtle changes in design features, including random effect variances and subgroup compositions, which the authors here address in their tutorial paper.
+
+If it looks like power simulation is the way forward for you as you plan the power analysis for your research design, you should anticipate that the process will take some time and effort to code up and run. You will have to make a *lot* of decisions about the distributional structure of your expected data: what are reasonable correlation values for some of the variables? What is the best tool for simulating their values jointly? What proportions will you expect across your categorical data, and how random will they be?
+
+There are no easy answers to these questions, but as you spend more time thinking about the properties of datasets, it will become easier to generate and test plausible simulations. Especially if you are new to this process, you will likely benefit from reproducing examples given in tutorials such as the paper linked above, and then adjusting the examples to meet your specifications.
+
+And remember, considerations like time, money, and other costs remain real and valid constraints on your sample size---at the end of the day, you may have to simplify your model and concede to certain assumptions and limitations in order to reach a reasonable, practical sample size estimate for your situation. That does not mean that you won't be able to do meaningful research! It just means you will have to adjust your expectations and generalizations accordingly, and that your research program may need to grow more before you can address all of your questions of interest.

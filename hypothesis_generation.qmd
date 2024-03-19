@@ -1,0 +1,51 @@
+---
+bibliography: references.bib
+---
+
+# Hypothesis Generation {.sec-hypothesis_generation}
+
+### Observe, describe, and build hypotheses.
+
+Hypothesis generation is the purview of exploratory work. Hypotheses can sometimes be derived directly from highly specified theories, but in the messy world of the behavioral and social sciences, it is more common to construct hypothesis on the basis of patterns observed in exploratory datasets or selected from our experiences in the world.
+
+<div style="float: right; position: relative; top: 0px; padding: 10px; width: 35%">
+[![John Wilder Tukey](images/tukey_3.jpg)](https://csml.princeton.edu/tukey)
+</div>
+
+The principle of separating exploratory and confirmatory research into distinct lines of inquiry---crucially, inquiries conducted on *separate* datasets---derives from the original formalization of exploratory data analysis (EDA) developed by **John Tukey** in the 1970s-80s [@tukey1970; @tukey1980]. Tukey championed the value of questions that ask, "what is $X$ like?" or "what characterizes $X$?" These types of questions orient us to analyses that help us document the existence of a phenomenon, describe its features, quantify it, and summarize it.
+
+
+
+### Descriptive analysis: charting new territory
+
+In some cases, description and quantification of a phenomenon might itself satisfy your immediate research question. This is often the case when description alone is a considerable challenge, such as when a dataset is especially large or complex, and a dimensionality-reduction technique is needed to make sense of the data.
+
+In genetics research, for example, researchers characterize cell samples based on the cells' different transcription profiles across thousands or tens of thousands of different genes. To achieve a working description of their complex sample data, biologists will use exploratory techniques like principal components analysis (PCA) to organize cell samples based on variance in their gene expression patterns, aiming to group together cells that express similar gene profiles [see @marypiper20237723318 for a basic tutorial].
+
+![PCA in genetics research](images/pollen2014_pca_fig.png){#fig-gene_pca}
+
+@fig-gene_pca shows an example of this analysis in action in a genetics paper from @pollen2014 (this figure is discussed as an example in [this](https://www.youtube.com/watch?v=_UVHneBUBW0) tutorial video). In this example, PCA is used to differentiate cell types based on gene transcription heterogeneity.
+
+PCA and other tools for dimensionality reduction such as multidimensional scaling (MDS) are increasingly helpful descriptive methods as the current era of "big data" grows to encompass more and more scientific fields. These methods can additionally be used in combination with categorization and clustering tools---for example, support vector machine (SVM) classifiers [see @mair2022 for a tutorial paper]---to make complex, feature-rich data more approachable and provide a launchpad for the generation of hypotheses.
+
+### From description to hypothesis
+
+In many cases, exploratory description is a prerequisite step to start building up a research program so that you can design subsequent confirmatory analyses. Particularly if your research constitutes the very first inquiry into a new topic area, you might need to dedicate multiple early studies to exploration and description alone before you are ready to generate and test specific hypotheses. Before you can start worrying about statistical power, sample sizes, and *p*-values, you need to decide what question you want to ask, and how it should be formalized into a statistical model or test.
+
+This process---of using exploration to inform hypothesis generation---is complex. And yet, we often mislead ourselves into thinking it is straightforward. To correct this misconception, we can again turn to Tukey, who articulated his concern about this issue in his piece, "We Need Both Exploratory and Confirmatory," published in *The American Statistician* in 1980. In that article, Tukey emphasized that the scientific method is not linear, but *iterative* [@tukey1980a], and illustrated this distinction using a series of diagrams (reproduced below with adjusted formatting):
+
+> "We are, I assert, all too familiar with the following straight-line paradigm---asserted far too frequently as how science and engineering function:
+>
+> $(*) \; \text{question} \rightarrow \text{design} \rightarrow \text{collection} \rightarrow \text{analysis} \rightarrow \text{answer}$
+>
+> ...
+>
+> What often happens is better diagrammed thus:
+>
+> $(*) \; \text{idea} \rightarrow \, \circlearrowright ({\text{question} \atop \text{design}})\circlearrowright \, \rightarrow \text{collection} \rightarrow \text{analysis} \rightarrow \text{answer}$"
+
+Tukey goes on to explain that there is an important difference between having an *idea* of a question (which we can describe in words) and having a statistically-supportable question (which we can describe in hypothesis terms). In order to obtain a research question that is ready for confirmatory analysis, we may have to repeat the exploratory process many times, refining our question and design along the way.
+
+### Post-hoc exploratory analysis
+
+Finally, exploratory analysis can be a *follow-up* to a completed confirmatory analysis to motivate new, subsequent lines of inquiry [see @fife2022]. It is important to always be clear about exactly *which* analyses are exploratory in this context, so as not to imply that inferential conclusions should be drawn from them. Nevertheless, researchers should not shy away from using exploratory analysis as a generative tool for guiding the long-term development of a research program.

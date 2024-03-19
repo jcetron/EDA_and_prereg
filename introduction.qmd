@@ -1,0 +1,21 @@
+# Introduction {.unnumbered}
+
+<div style="float: right; position: relative; top: 0px; padding: 10px; width: 20%">
+![](images/Preregistered_large_color_(vector).svg)
+</div>
+
+Preregistration has become an important standard in social science research to protect the researcher and the broader scientific community from engaging in questionable research practices [@john2012; @nosek2018]. Such practices can include the p-hacking of statistical tests [@simmons2011], hypothesizing after the results are known [referred to as *HARKing*, see @kerr1998], and the cherry-picking of data, variables, or statistically significant results. By preregistering your methods, sample, and analysis plan before conducting a new study, you maintain a level of transparency in your research workflow that helps reduce the *researcher degrees of freedom* [@simmons2011]---excessive flexibility in your research workflow---that can intentionally or inadvertently enable these problematic practices to persist.
+
+Nevertheless, there are parts of a new study that can be challenging to define in advance. If your new study is taking first steps into uncharted scientific waters, you may not be able to know which statistical analysis or model class will be best suited to your data until you have the data in hand. In these situations, preregistration can feel like an obstacle: you can't proceed to data collection without stating your intended analysis plan, but you can't formalize your analysis plan without data-dependent information. So, is preregistration still a helpful practice here?
+
+Yes! In fact, one of the intended functions of the preregistration process is to make researchers distinguish between two aspects of a research program that should in principle be separated: exploratory and confirmatory work.
+
+Here is how these two concepts are described by the [Open Science Framework](https://www.cos.io/initiatives/prereg) (OSF) in the context of preregistration:
+
+> "Preregistration separates hypothesis-generating (exploratory) from hypothesis-testing (confirmatory) research. Both are important. But the same data cannot be used to generate and test a hypothesis, which can happen unintentionally and reduce the credibility of your results."
+
+If you are not already incorporating a designated exploratory study into your research plan, the prospect of doing so can feel daunting---where you might have expected (and perhaps budgeted) to collect and analyze just one dataset, you now need two separate studies before you can answer your research question. But this attitude undermines the importance of exploratory research! Before you can worry about the *answer* to your research question, you need exploratory research to help you be sure that you are *asking the right question* at all.
+
+Furthermore, while you may require separate samples to conduct your exploratory and confirmatory analyses, the total analysis work need not be twice as burdensome. As long as you are clear about which aspects of your research program are exploratory and which are confirmatory, you can plan (and preregister!) your work efficiently and effectively.
+
+In this tutorial, we will discuss strategies for balancing exploratory and confirmatory statistical analyses during study planning and preregistration. We will review the distinctions between exploratory and confirmatory analyses and the different analytical goals they involve, such as description, hypothesis generation, inference, and out-of-sample prediction. From there, we will discuss two aspects of new study design that can be the most challenging to preregister: statistical model specification and sample size estimation. We will use the toolkit of exploratory analysis to help make addressing the challenges of research planning easier as you set up and preregister your research program.

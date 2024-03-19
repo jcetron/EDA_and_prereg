@@ -1,0 +1,29 @@
+# Model Specification {#sec-model_spec}
+
+### Asking a question in model form
+
+Now that we have reviewed the exploratory and confirmatory research workflows in quite a bit of theoretical detail, it should hopefully be clear that formulating a research question that is "statistically answerable" is part of the *exploratory* research process. As we learned from Tukey previously, there is a key difference between a research *idea* and a research *question*, and to use the tools of confirmatory statistics, we need a *question*.
+
+For this section, we will focus on operationalizing research questions as regression models. Regression models are wonderfully flexible, thanks to the many extensions and modifications of the linear model (linear mixed models, generalized linear models, generalized linear mixed models...), as well as the fact that classical statistical tests and analyses (*t*-tests, ANOVA, $\chi^2$ tests) can be expressed as special cases of the linear model.
+
+However, with great flexibility comes great responsibility: you, the researcher, must make choices about which model configuration best expresses your question! This sounds obvious, but it can be quite tricky. Which variables will matter? Which covariates or controls might you need to account for? Will you need interaction terms? How will your data be distributed---will you need a generalized linear model (GLM)? Which aspects of your design might require robust methods to address---will you need a mixed-effects model (LMM) or a robust regression model?
+
+Answering these questions is the only way to refine a research idea into a model-ready research question, and it can be hard work. Sometimes, your theory or idea alone is not sufficient to resolve all of these unknowns. In those situations, *data-driven* methods using exploratory data can be extremely valuable to help you translate your research idea into a model-ready research question. These methods can include stepwise regression, regression with shrinkage (e.g., LASSO), or other variable importance analyses. Crucially, data-driven model selection procedures are inherently exploratory, so they should be conducted on exploratory datasets that are separate from the confirmatory data used for inference.
+
+### The post-selection inference problem
+
+Whatever methods you use, you *must* specify your final model *before* you can proceed to the inferential testing phase, in order to ensure the integrity of your inferences. If you fail to separate the model selection process from the inferential testing process, your analysis will be vulnerable to the **post-selection inference** problem.
+
+A thorough and technical review of post-selection inference is provided by @kuchibhotla2022, but for this tutorial we will settle for a high-level description they provide in their introduction (p. 506):
+
+> "Once the data have been explored to find the hypothesis or model, the assumptions of a fixed model and fixed hypothesis are no longer appropriate. Classical inference procedures may no longer have the properties established by classical theory. This can invalidate inferences, nullifying the claimed error rates or interpretations. Test statistics and estimators may exhibit distributions completely different from those classical theory prescribes. Biases in estimation caused by data exploration can arise. Procedures designed to control false discovery rates may no longer achieve the desired error control. Power calculations that do not account for data exploration should be viewed suspiciously. The selection of any aspect of a model or hypothesis using the data introduces sampling variability into the model or hypotheses, rendering random the specification process itself."
+
+In other words, once you use a dataset to derive the structure of a model, you should not "double-dip" into that same dataset to analyze your model for inference. This is the reason why model specification is a central component of any preregistration.
+
+### Avoiding post-selection inference
+
+If you are able to collect multiple datasets without running into data collection limitations, that is the easiest strategy to achieve both model selection and model testing without running into post-selection inference problems. If you are working with a single dataset and have realized you need to do exploratory, data-driven model selection, you will most likely need to split your data in order to keep your model selection data separate from your testing data. (More complex statistical modeling strategies do exist in as alternatives to data splitting, and they are discussed at length by @kuchibhotla2022, but they are difficult to implement technically and they still involve limitations.) Unfortunately, there are no clear guidelines on how to split your data to retain a larger share for the inference dataset, so your best option is to simply divide your dataset in half.
+
+Learning that you need to split your data after you have already laboriously collected it can be very frustrating. Splitting your data reduces your inferential sample size, and therefore reduces your inferential statistical power (as we'll talk about in the next section), which can add new limitations to your analysis that you had not anticipated.
+
+Still, it is important to remember that the exploratory work of refining your research idea into a model-ready research question is an essential part of the iterative research process, and to value it accordingly! Inference is not the only form of learning produced by scientific research. Research programs are cumulative, and the generative output of exploratory work sets us up to ask better, more informative inferential questions in the next round of inquiry and analysis.

@@ -1,0 +1,51 @@
+---
+bibliography: references.bib
+---
+
+# Hypothesis Testing {.sec-hypothesis_testing}
+
+### Test, infer, and (dis)confirm.
+
+If you already have specific, hypothesis-ready questions you want to ask about your phenomenon of interest, you are in the domain of confirmatory analysis. In a confirmatory framework, research questions are typically oriented around statistical *inferences*: conclusions we can draw with some confidence about a general principle or a broader population based on an analysis of sample data.
+
+To position ourselves so that we can draw such conclusions with as much confidence as possible, we make use of a wide variety of statistical models and tests, which can be situated within one of two main inferential frameworks: Frequentist inference and Bayesian inference. A deep dive into the comparison between frequentist and Bayesian approaches is beyond the scope of this tutorial---here, we will focus on the frequentist inferential framework, due to its ubiquity and its relevance to common preregistration hurdles (namely, power analysis for sample size estimation).
+
+No matter which framework we use, whenever we perform inferential testing in statistical analysis, we are *always* beholden to certain constraints and assumptions. Statistics is not magic---it is not possible to conjure up the true, cosmic probability of an event occurring or a hypothesis being correct. In some ways, the label "confirmatory" in confirmatory data analysis is a bit over-enthusiastic: statistical inference does not involve true "confirmation". Instead, it relies on comparisons between observed data and different theoretical scenarios, yielding conditional assessments of the relative likelihoods of those scenarios.
+
+### Inferential testing structure and uncertainty evaluation
+<div style="float: right; position: relative; top: 0px; padding: 20px;">
+[![](https://imgs.xkcd.com/comics/null_hypothesis.png)](https://xkcd.com/892/)
+</div>
+
+The most common [and perhaps most notorious, see @cumming2014; @sakaluk2016] structure for comparing hypotheses for statistical inference is *Null-Hypothesis Significance Testing* (NHST). Under NHST, we frame our hypothesis of interest as an "effect"---some relationship between $X$ and $Y$---and we use our observed data compare the plausibility of a world in which that effect does *not* exist (the "null hypothesis" $H_{0}$) against an alternative world in which that effect exists (the "alternative hypothesis" $H_{A}$).
+
+In other words, inferential questions under NHST will ask, "is the relationship between $X$ and $Y$ equal to zero?" And while these questions are framed to receive a "yes" or "no" answer, it is crucial to remember that our ability to answer them at all relies on the statistical process of *estimation*, and that process (and the estimates it generates) is always accompanied by some *uncertainty*.
+
+In order for us to provide an answer to our inferential question, we therefore have to specify how much uncertainty we are willing to tolerate. This is where concepts such as Type I and Type II errors ("false positive" and "false negative" conclusions, respectively) come into play. How confident do we have to be that our result is not due to random chance before we are satisfied? In frequentist inference, we call this uncertainty tolerance threshold *alpha* ($\alpha$), and it has to be set *in advance*. We typically set a threshold of $\alpha = 0.05$, indicating that we will not tolerate more than a 5% theoretical probability that the null hypothesis is actually true and our result occurred due to random chance.
+
+With our uncertainty threshold in hand, we continue with the estimation portion of our statistical modeling process. There are many tools we can use to estimate and quantify relationships in our data---the many flavors of *linear regression* are among the most common approaches in experimental data analysis, and we will focus on regression models in this tutorial. Importantly, the results of our estimation procedure are not themselves inferential results! The "inference" component of inferential statistical modeling only comes at the point where we assess (or "test") the uncertainty in our estimates by comparing them to our tolerance threshold. Up until that point, we can estimate and quantify the relationships between $X$ and $Y$ in a purely descriptive manner.
+
+Once we are ready to formally compare our estimates of the relationship between $X$ and $Y$ to our hypotheses about that relationship, we enter the domain of inference. It is here, finally, that can we compute a $p$-value for our estimated effect. With our $p$-value we are asking, "if we assume the null hypothesis is true and there is *no* real effect, if this experiment were repeated many many times, what is the probability that we would observe the effect we observed here (or one more extreme)?" If we find that this quantity---which is notoriously difficult to describe succinctly---is below our pre-defined $\alpha$ threshold value, then we label the result as "statistically significant" and we draw the inference that the relationship between $X$ and $Y$ is *not* equal to zero.
+
+### Designing inferential questions
+
+How do you decide which relationship to test for statistical significance? How do you know what to include in your model (what to "control for")? Generating your precise inferential question depends on your *theory* of the phenomenon. "Theory" here can be defined as any insight or reasoning that you, as the researcher, provide that guides the construction of your hypothesis. This insight can be derived from your own previous work (including exploratory work), or from existing literature on the phenomenon or related research topics.
+
+For example, suppose you have driven a car in different parts of the United States, and you have observed that drivers in northern cities honk their horns more readily in traffic than drivers in southern cities. You are interested in testing this theory formally, because at this point it remains informed only by your personal experience (an exploratory insight). You obtain a dataset of car honks recorded and traffic levels at various intersections in northern and southern cities, and you prepare a research question: is there a difference in honking frequency by U.S. region (north vs. south)?
+
+This question might already appear ready for inferential analysis---indeed, you can neatly formulate null and alternative hypotheses for it:
+
+$$H_{0}: \text{Honks}_{\text{North}} - \text{Honks}_{\text{South}} = 0$$
+$$H_{1}: \text{Honks}_{\text{North}} - \text{Honks}_{\text{South}} ≠ 0 $$
+But your theory of the phenomenon goes further: you don't think drivers honk for no reason, but rather that they are responding to traffic frustration. It is possible, therefore, that a difference in *traffic*, not the social norms of honking, explains your experiences in the northern and southern U.S. If this were the case, you would want to know! You are not really interested in different regional traffic patterns; you are interested in a possible *cultural* difference between these regions. Consequently, you refine your research question: is there a difference in honking frequency by U.S. region *under equivalent traffic conditions*?
+
+This refined question requires a more complex model specification, because you have to estimate several quantities at once now. Specifically, you are estimating differences in honk frequency based on two factors simultaneously: region and traffic. This estimation process fits nicely into a multiple regression framework, modeled by the following equation:
+
+$$\text{Honk Frequency} = \beta_0 + \beta_1\text{Region} + \beta_2\text{Traffic} + \epsilon$$
+The accompanying null and alternative hypotheses of interest for your inferential test can now be written as:
+
+$$H_0: \beta_1 = 0$$
+$$H_1: \beta_1 ≠ 0$$
+Note that your hypotheses for inferential testing still revolve around the region-related difference in honking frequency ($\beta_1$), but the estimate of that difference now accounts for any traffic-related difference in honking frequency ($\beta_2$) as another relevant factor.
+
+Whatever your phenomenon of interest is, and however you derive your theory of it, *you*, the researcher, will have to make decisions that you must be prepared to justify. As Tukey and other champions of exploratory analysis remind us, the most interesting, most relevant questions do not emerge ready-to-ask from the universe---we have to work to refine them, to coax them into a formal state so that our hypothesis tests generate answers that we are actually interested in learning.

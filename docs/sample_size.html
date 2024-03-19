@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Preregistration and Exploratory Analysis - 5&nbsp; Sample Size Estimation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./model_spec.html" rel="prev">
+<link href="./images/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./prereg_challenges.html">Preregistration Challenges</a></li><li class="breadcrumb-item"><a href="./sample_size.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sample Size Estimation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Preregistration and Exploratory Analysis</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./research_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Research Processes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hypothesis_generation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hypothesis Generation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hypothesis_testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hypothesis Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prediction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Out-of-sample Prediction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./prereg_challenges.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preregistration Challenges</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_spec.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Model Specification</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sample_size.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sample Size Estimation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#how-many-participants-do-i-need-and-why" id="toc-how-many-participants-do-i-need-and-why" class="nav-link active" data-scroll-target="#how-many-participants-do-i-need-and-why">How many participants do I need (and <em>why</em>)?</a></li>
+  <li><a href="#a-brief-aside-bayesian-sample-size-estimation" id="toc-a-brief-aside-bayesian-sample-size-estimation" class="nav-link" data-scroll-target="#a-brief-aside-bayesian-sample-size-estimation">A brief aside: Bayesian sample size estimation</a></li>
+  <li><a href="#power-analysis-at-last" id="toc-power-analysis-at-last" class="nav-link" data-scroll-target="#power-analysis-at-last">Power analysis at last</a></li>
+  <li><a href="#power-analysis-for-complex-models" id="toc-power-analysis-for-complex-models" class="nav-link" data-scroll-target="#power-analysis-for-complex-models">Power analysis for complex models</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./prereg_challenges.html">Preregistration Challenges</a></li><li class="breadcrumb-item"><a href="./sample_size.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sample Size Estimation</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-sample_size" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sample Size Estimation</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="how-many-participants-do-i-need-and-why" class="level3">
+<h3 class="anchored" data-anchor-id="how-many-participants-do-i-need-and-why">How many participants do I need (and <em>why</em>)?</h3>
+<p><em>“What sample size do I need?”</em> is almost certainly the most common question new study planners will ask. And for good reason! You need to establish a planned sample size anytime you apply for a grant, complete a preregistration, and ultimately collect study data.</p>
+<p>And if you’ve ever asked this question, you have probably been met with the following response: “Do a power analysis to figure out what sample size you need!”</p>
+<p>Sounds easy enough, right?</p>
+<p>Well, if you made your way to this tutorial, it’s probably because you found out that this is <em>not</em> as easy or simple as it sounds. But why is it such a challenge?</p>
+<p>First of all, just as with model specification, there are several considerations that can make sample size determination a difficult process to standardize. This is because there are actually many parts of an analysis that can be affected by sample size—statistical power is just one of them, and it is specifically related to hypothesis testing and inference.</p>
+<p>Other factors that can depend on sample size include the accuracy and stability of summary statistics <span class="citation" data-cites="schönbrodt2013">(e.g., correlation coefficients, <a href="references.html#ref-schönbrodt2013" role="doc-biblioref">Schönbrodt and Perugini 2013</a>)</span> or parameter estimates in a statistical model <span class="citation" data-cites="maas2005">(<a href="references.html#ref-maas2005" role="doc-biblioref">Maas and Hox 2005</a>)</span>. And of course, there are practical constraints to sample sizes that we often have to accommodate regardless of statistical ideals, such as when access to a sample is costly or limited, or when a sample comes from a very small or very rare population (such as a patient population for a rare condition or disease). Unlike statistical power, the above factors are important considerations in both exploratory and confirmatory contexts, since they impact aspects of data analysis beyond just inferential testing.</p>
+<p>It is therefore important to expand our thinking about sample size beyond the scope of power analysis alone. Power analysis can be thought of as a special case of a larger sample size determination framework:</p>
+<ul>
+<li><p>Power analysis to deal with concerns about balancing false positive and false negative rates during statistical inference</p></li>
+<li><p>Estimation procedures to deal with the possibility of unstable or biased estimates due to insufficient data, especially in clustered data <span class="citation" data-cites="maas2005">(see <a href="references.html#ref-maas2005" role="doc-biblioref">Maas and Hox 2005</a>)</span></p></li>
+<li><p>Sampling approaches to deal with practical limitations to sampling effectively</p></li>
+</ul>
+<p>Among these components, power analysis will often yield the largest minimum sample size requirement. By contrast, practical limitations to sampling (money, time, access) are often the greatest restrictions on potential sample size.</p>
+<p>Navigating these different pieces of the sample-size-estimation puzzle, especially for complex models, is <em>not</em> an exact science. Provide the best justification that you can for your estimated sample size, and preregister that number in advance so that you can preserve the integrity of your statistical inferences during analysis. Finally, remember that there are other ways of validating and increasing confidence in your results and your emergent theory of the phenomenon, such as by conducting replications and out-of-sample prediction analyses. You cannot and should not answer all of your research questions all the way in a single study or analysis!</p>
+</section>
+<section id="a-brief-aside-bayesian-sample-size-estimation" class="level3">
+<h3 class="anchored" data-anchor-id="a-brief-aside-bayesian-sample-size-estimation">A brief aside: Bayesian sample size estimation</h3>
+<p>Although we remain primarily focused on frequentist analyses in this tutorial, it is worth taking a short detour to discuss a common question that arises among those doing Bayesian analyses: how do you determine sample sizes for Bayesian models?</p>
+<p>Even though the concept of statistical power is not compatible with the conditional probabilities estimated under Bayesian inference, the challenges of sample size estimation illustrated do not simply disappear under a Bayesian framework. There are still relationships between sample size and important properties of estimation that impact Bayesian models.</p>
+<p>However, implementing sample size considerations, especially for effects of interest, is further complicated in Bayesian modeling due to the heavily distributional nature of Bayesian models and their outputs. Unlike frequentist models, which only produce point-estimates of parameter values, Bayesian models yield posterior distributions for each parameter, creating a continuous range of possible inferential tests one can perform. As a result, there are more possible “effects” one can conceptualize for testing with Bayesian models, and therefore more scenarios one must plan for when anticipating the impact of sample size on estimation and inference.</p>
+<p>Consequently, Bayesian sample size estimation is even more difficult to standardize, which partly explains the difficulty of finding resources for how to do it. Generally, the process relies heavily on customized simulation analyses that you will likely have to design for yourself. For at least one illustration of how this can be done in practice, see <span class="citation" data-cites="chen2017">(<a href="references.html#ref-chen2017" role="doc-biblioref">Chen and Fraser 2017</a>)</span>.</p>
+</section>
+<section id="power-analysis-at-last" class="level3">
+<h3 class="anchored" data-anchor-id="power-analysis-at-last">Power analysis at last</h3>
+<p>Now, finally, we can talk in detail about (frequentist) power analysis. We benefit from power analysis if we are doing confirmatory research where we have:</p>
+<ul>
+<li><p>a clear inferential hypothesis,</p></li>
+<li><p>a fully specified model,</p></li>
+<li><p>a clearly-defined effect size of interest,</p></li>
+<li><p>an inferential testing threshold (e.g., an <span class="math inline">\(\alpha\)</span> value of 0.05),</p></li>
+<li><p>a minimum power threshold (e.g., 80% power).</p></li>
+</ul>
+<p>If you have done power analyses in the past, you are likely familiar with the last three bullet points on that list. Since power analysis involves solving for a missing variable (in our case, sample size), it requires fixing other inferential testing variables in place: the effect size, the acceptable false positive rate (the “Type I error rate”), and the acceptable false negative rate (the “Type II error rate”). However, although the error rates are generally inherited from field standards of practice (generally an <span class="math inline">\(\alpha\)</span> value of 0.05 or 0.01 and a power value of 80% or 90%), the effect size is derived from our specific hypothesis test—making it dependent on our specific hypothesis and the model we use to test it. And, to complicate matters further, <em>we</em> have to decide, as the researchers, what value for that effect size would be meaningful to us.</p>
+<p>This is the hardest conceptual part of constructing a power analysis. It’s not difficult to set our threshold for <em>statistical</em> significance in a power analysis—we can simply use our standard <span class="math inline">\(\alpha\)</span> threshold value. The difficulty is deciding on a threshold for <em>practical</em> significance.</p>
+<p>In the literature on power analysis, the practical significance threshold value is referred to with the acronym <strong>SESOI</strong>, which stands for “smallest effect size of interest.” Just as with model specification and inferential question formation, the SESOI is something that <em>you</em>, the researcher, must decide upon. You might be able to source it from existing literature measuring similar effects, or from prior exploratory work of your own. Alternatively, if you have a practical, real-world quantity for an effect that would be meaningful for you to observe, you can construct your SESOI around that quantity.</p>
+<p>For example, suppose you study performance gaps in educational achievement due to socioeconomic factors, and you are testing the effectiveness of an intervention designed to close those gaps. You might base your SESOI around the effectiveness demonstrated of other interventions in the past, or a percentage of the performance gap that, if closed, would be expected to mitigate important downstream consequences that performance gaps tend to cause.</p>
+<p>One thing that you should <strong><em>not</em></strong> do when choosing an SESOI is re-use an effect size you’ve observed in a very small pilot sample. For one thing, as discussed above <span class="citation" data-cites="maas2005">Schönbrodt and Perugini (<a href="references.html#ref-schönbrodt2013" role="doc-biblioref">2013</a>)</span>, very small samples can yield unstable or biased estimates of effects, and therefore your SESOI could be anchored on an inaccurate expectation. But more importantly, defining an SESOI is inherently a <em>theoretical</em> task: it is the practical impact you think would matter to observe in your research. You can certainly use exploratory data to give you a realistic range of expectations for effect sizes your phenomenon of interest can reasonably yield, but this is not a substitute for thinking critically about what level of effect would make a difference for our broader understanding of the phenomenon in the world.</p>
+</section>
+<section id="power-analysis-for-complex-models" class="level3">
+<h3 class="anchored" data-anchor-id="power-analysis-for-complex-models">Power analysis for complex models</h3>
+<p>Now armed with your clear inferential hypothesis, your specified model, your SESOI, and your Type I and Type II error rate thresholds, it is finally time to perform a power analysis. At this stage, the conceptual challenges are largely behind you, but procedural challenges remain. The biggest procedural challenge is deciding on the right method for implementing your power analysis. Namely, it is important to use an analysis method that is sufficiently sophisticated for the models you are preparing to use—models which, as discussed in the previous section, are often quite sophisticated themselves!</p>
+<p>Classical power analysis methods were developed for relatively simple inferential testing frameworks, such as <em>t</em>-tests, omnibus <em>F</em>-tests, and simple regression. However, most modern quantitative modeling work extends well beyond these frameworks, frequently involving advanced and complex regression models: the generalized linear model (GLM), the linear mixed-effects model (LMM; also called <em>multilevel</em> or <em>hierarchical</em> linear models), and even the generalized linear mixed-effects model (GLMM).</p>
+<p>Statistical power for advanced regression models—particularly mixed-effects models of any kind—is difficult to compute. The best methods for doing so involve <em>power simulations</em>, since these models are too complex for the analytic solutions available in the case of <em>t</em>-tests and other simpler models.</p>
+<p>The present tutorial is not itself a power simulation tutorial. But you can find a very thorough tutorial for performing power simulations on (generalized) linear mixed-effects models articulated in <a href="https://doi.org/10.3758/s13428-021-01546-0">this paper</a> <span class="citation" data-cites="kumle2021">(<a href="references.html#ref-kumle2021" role="doc-biblioref">Kumle, Võ, and Draschkow 2021</a>)</span> and their accompanying code notebooks (programmed in R), available <a href="https://lkumle.github.io/power_notebooks/">here</a>.</p>
+<p>&nbsp;</p>
+<div class="border">
+<p><a href="https://doi.org/10.3758/s13428-021-01546-0"><img src="images/kumle_etal_2021_power.png" class="img-fluid"></a></p>
+</div>
+<p>&nbsp;</p>
+<p>A particularly useful aspect of the Kumle, Võ, and Draschkow tutorial above is that it includes a specific example for models involving multiple crossed random effects, a common feature of models in psychology and cognitive science (e.g., for studies involving a set of participants each evaluating many stimulus items). In complex models, statistical power becomes sensitive to seemingly subtle changes in design features, including random effect variances and subgroup compositions, which the authors here address in their tutorial paper.</p>
+<p>If it looks like power simulation is the way forward for you as you plan the power analysis for your research design, you should anticipate that the process will take some time and effort to code up and run. You will have to make a <em>lot</em> of decisions about the distributional structure of your expected data: what are reasonable correlation values for some of the variables? What is the best tool for simulating their values jointly? What proportions will you expect across your categorical data, and how random will they be?</p>
+<p>There are no easy answers to these questions, but as you spend more time thinking about the properties of datasets, it will become easier to generate and test plausible simulations. Especially if you are new to this process, you will likely benefit from reproducing examples given in tutorials such as the paper linked above, and then adjusting the examples to meet your specifications.</p>
+<p>And remember, considerations like time, money, and other costs remain real and valid constraints on your sample size—at the end of the day, you may have to simplify your model and concede to certain assumptions and limitations in order to reach a reasonable, practical sample size estimate for your situation. That does not mean that you won’t be able to do meaningful research! It just means you will have to adjust your expectations and generalizations accordingly, and that your research program may need to grow more before you can address all of your questions of interest.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-chen2017" class="csl-entry" role="listitem">
+Chen, Ding-Geng, and Mark W. Fraser. 2017. <span>“A Bayesian Approach to Sample Size Estimation and the Decision to Continue Program Development in Intervention Research.”</span> <em>Journal of the Society for Social Work and Research</em> 8 (3): 457–70. <a href="https://doi.org/10.1086/693433">https://doi.org/10.1086/693433</a>.
+</div>
+<div id="ref-kumle2021" class="csl-entry" role="listitem">
+Kumle, Levi, Melissa L.-H. Võ, and Dejan Draschkow. 2021. <span>“Estimating Power in (Generalized) Linear Mixed Models: An Open Introduction and Tutorial in R.”</span> <em>Behavior Research Methods</em> 53 (6): 2528–43. <a href="https://doi.org/10.3758/s13428-021-01546-0">https://doi.org/10.3758/s13428-021-01546-0</a>.
+</div>
+<div id="ref-maas2005" class="csl-entry" role="listitem">
+Maas, Cora J. M., and Joop J. Hox. 2005. <span>“Sufficient Sample Sizes for Multilevel Modeling.”</span> <em>Methodology: European Journal of Research Methods for the Behavioral and Social Sciences</em> 1 (3): 86–92. <a href="https://doi.org/10.1027/1614-2241.1.3.86">https://doi.org/10.1027/1614-2241.1.3.86</a>.
+</div>
+<div id="ref-schönbrodt2013" class="csl-entry" role="listitem">
+Schönbrodt, Felix D., and Marco Perugini. 2013. <span>“At What Sample Size Do Correlations Stabilize?”</span> <em>Journal of Research in Personality</em> 47 (5): 609–12. <a href="https://doi.org/10.1016/j.jrp.2013.05.009">https://doi.org/10.1016/j.jrp.2013.05.009</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./model_spec.html" class="pagination-link" aria-label="Model Specification">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Model Specification</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -17,7 +17,7 @@ No matter which framework we use, whenever we perform inferential testing in sta
 [![](https://imgs.xkcd.com/comics/null_hypothesis.png)](https://xkcd.com/892/)
 </div>
 
-The most common [and perhaps most notorious, see @cumming2014; @sakaluk2016] structure for comparing hypotheses for statistical inference is *Null-Hypothesis Significance Testing* (NHST). Under NHST, we frame our hypothesis of interest as an "effect"---some relationship between $X$ and $Y$---and we use our observed data compare the plausibility of a world in which that effect does *not* exist (the "null hypothesis" $H_{0}$) against an alternative world in which that effect exists (the "alternative hypothesis" $H_{A}$).
+The most common [and perhaps most notorious, see @cumming2014; @sakaluk2016] structure for comparing hypotheses for statistical inference is *Null-Hypothesis Significance Testing* (NHST). Under NHST, we frame our hypothesis of interest as an "effect"---some relationship between $X$ and $Y$---and we use our observed data to compare the plausibility of a world in which that effect does *not* exist (the "null hypothesis" $H_{0}$) against an alternative world in which that effect exists (the "alternative hypothesis" $H_{A}$).
 
 In other words, inferential questions under NHST will ask, "is the relationship between $X$ and $Y$ equal to zero?" And while these questions are framed to receive a "yes" or "no" answer, it is crucial to remember that our ability to answer them at all relies on the statistical process of *estimation*, and that process (and the estimates it generates) is always accompanied by some *uncertainty*.
 

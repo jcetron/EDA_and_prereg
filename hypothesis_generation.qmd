@@ -18,15 +18,94 @@ The principle of separating exploratory and confirmatory research into distinct 
 
 ### Descriptive analysis: charting new territory
 
-In some cases, description and quantification of a phenomenon might itself satisfy your immediate research question. This is often the case when description alone is a considerable challenge, such as when a dataset is especially large or complex, and a dimensionality-reduction technique is needed to make sense of the data.
+In some cases, description and quantification of a phenomenon might itself satisfy your immediate research question. This is often the case when description alone is a considerable challenge, such as when a dataset is especially large or complex. The toolbox of descriptive analysis includes many techniques for summarizing and organizing a dataset to reveal its structure in human-readable terms. 
 
-In genetics research, for example, researchers characterize cell samples based on the cells' different transcription profiles across thousands or tens of thousands of different genes. To achieve a working description of their complex sample data, biologists will use exploratory techniques like principal components analysis (PCA) to organize cell samples based on variance in their gene expression patterns, aiming to group together cells that express similar gene profiles [see @marypiper20237723318 for a basic tutorial].
+#### Initial description: summary statistics and distribution visualizations
+
+Let's use an example dataset from the `datasets` package in R to illustrate some of these descriptive analyses in action. The `attitude` dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. Each row of the data frame corresponds to one department, and the values in each column are the percent of favorable responses to each question from across employees sampled in a given department. The dataset is previewed in @tbl-attitude_example_setup (I've renamed the variables based on the [documentation](https://rdrr.io/r/datasets/attitude.html) for interpretability).
+
+```{r tbl-attitude_example_setup, echo=FALSE, message=FALSE}
+require(pacman)
+p_load(tidyverse, ggplot2, vtable, kableExtra, DT)
+
+# load attitude data
+data("attitude")
+
+# rename using full variable names from help file
+attitude_varnames_full <- c('Overall rating',
+                            'Handling of employee complaints',
+                            'Does not allow special privileges',
+                            'Opportunity to learn',
+                            'Raises based on performance',
+                            'Too critical',
+                            'Advancement')
+colnames(attitude) <- attitude_varnames_full
+
+# data preview
+#kable(head(attitude), format = 'html')
+datatable(attitude, width = 1200, caption = "Direct preview of the Chatterjee-Price attitude survey data.")
+```
+
+As a first step in organizing these data to understand them better, we typically compute *summary statistics*: metrics that help characterize the distributions of our variables. These are generally metrics indicating the location (mean, median, etc.) and dispersion (standard deviation, quartile range, etc.) of a given variable's distribution. @tbl-attitude_example_table is an example summary table for our employee attitude data (computed using the `sumtable()` function from the `vtable` package in R):
+
+```{r tbl-attitude_example_table, echo=FALSE, message=FALSE}
+sumtable(attitude, out = 'return') %>% datatable(width = 1000, caption = "Summary statistics table for attitude dataset by variable.")
+```
+
+
+These summary metrics are already an improvement over the raw data alone in our attempt to characterize the data, but we can do much better by adding visualizations. Even simple descriptive visualizations like the histograms shown in @fig-attitude_example_hist can help give us a better impression of each of the distributions in the data.
+
+```{r fig-attitude_example_hist, echo=FALSE, message=FALSE, fig.id=TRUE, fig.cap="Histograms of variable distributions in attitude survey dataset."}
+# plot of all histograms
+ggplot(data = attitude %>%
+         pivot_longer(cols = everything()) %>%
+         mutate(name = factor(name, levels = attitude_varnames_full))) +
+  geom_histogram(aes(x = value)) +
+  xlab('Proportion of favorable responses per department (%)') +
+  ggtitle('Histograms of each variable') + 
+  facet_wrap(~name, ncol = 2)
+```
+
+#### Complex description: multivariate exploratory analyses
+
+Now that we have a better understanding of the individual distributions of each variable, we can use more complex descriptive tools to look at the relationships among the variables, describing the phenomenon more fully. For example, we might compute the relative similarities between each variable and visualize those relationships using tools like cluster analysis, often in conjunction with dimensionality-reduction techniques.
+
+Below is an example of these more advanced exploratory methods applied our attitude data. For this example, we have invented three categories for the variables in the data: "General" for the items "Overall rating" and "Too critical", "Management" for the items "Handling of employee complaints" and "Does not allow special privileges", and "Growth" for the items "Opportunity to learn", "Raises based on performance", and "Advancement". With this category structure in our data, we can combine two techniques to see whether the multivariate relationships in the data reflect the expected category structure. The first technique is multidimensional scaling (MDS), which allows us to embed the relationships between all the variables in a 2-dimensional scatter plot for easy visualization. The second technique is a type of machine learning classification method called support vector machine (SVM) classification, which will try to place the variables into categories based on the relationships in the data. [see @mair2022 for a tutorial paper on the combined use of these two methods.]
+
+
+```{r fig-attitude_example_svmmds, echo=FALSE, message=FALSE, fig.id=TRUE, fig.cap="Exploratory classification analysis plot showing multidimensional scaling (MDS) used together with support vector machine (SVM) classification on our modified attitude example data."}
+p_load(smacof)
+
+# create distance matrix for variables
+D <- dist(t(attitude))
+
+# fit MDS
+mdsfit <- mds(D, ndim = 2, type = 'ordinal')
+
+# define categories
+attitude_categories <- factor(c('General', 'Management', 'Management', 'Growth', 'Growth', 'General', 'Growth'))
+
+# add category information to mds configuration for SVM
+attitude_mds_cat <- mdsfit$conf %>%
+  as.data.frame() %>%
+  mutate(Category = attitude_categories)
+
+# fit SVM (simple example, no tuning)
+svmfit <- svm(Category ~ D1 + D2, data = attitude_mds_cat, kernel = 'linear')
+
+# plot joint svm/mds configuration plot
+svm_mdsplot(mds_object = mdsfit, svm_object = svmfit, class = attitude_categories, inset = c(-.5, .5))
+```
+
+@fig-attitude_example_svmmds shows the results of the exploratory MDS/SVM analysis. The color-coded regions reflect the SVM classifier's predicted category assignments, and the point shapes represent the actual category assignments. As we can see, the data align somewhat well with the expected categories, although not perfectly---the classifier places "Overall rating" and "Opportunity to learn" incorrectly into the "Management" category, due to apparent similarities between those variables and the other "Management" variables.
+
+Multivariate exploratory methods like these can also be used to reveal structures in the data that are not necessarily known in advance, and often in much larger datasets. In genetics research, for example, researchers will characterize cell samples based on the cells' different transcription profiles across thousands or tens of thousands of different genes, hoping to identify sensible structures through exploratory analyses. To achieve a working description of their complex sample data, biologists will use techniques like principal components analysis (PCA) to organize cell samples based on variance in their gene expression patterns, aiming to group together cells that express similar gene profiles [see @marypiper20237723318 for a basic tutorial].
 
 ![PCA in genetics research](images/pollen2014_pca_fig.png){#fig-gene_pca}
 
 @fig-gene_pca shows an example of this analysis in action in a genetics paper from @pollen2014 (this figure is discussed as an example in [this](https://www.youtube.com/watch?v=_UVHneBUBW0) tutorial video). In this example, PCA is used to differentiate cell types based on gene transcription heterogeneity.
 
-PCA and other tools for dimensionality reduction such as multidimensional scaling (MDS) are increasingly helpful descriptive methods as the current era of "big data" grows to encompass more and more scientific fields. These methods can additionally be used in combination with categorization and clustering tools---for example, support vector machine (SVM) classifiers [see @mair2022 for a tutorial paper]---to make complex, feature-rich data more approachable and provide a launchpad for the generation of hypotheses.
+Methods like PCA, MDS, SVM classification, and other similar techniques are powerful descriptive methods for the current era of "big data", which continues to grow and encompass more and more scientific fields. These methods can help make complex, feature-rich data more approachable and provide a launchpad for the generation of hypotheses.
 
 ### From description to hypothesis
 

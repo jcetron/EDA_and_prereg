@@ -89,6 +89,15 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="site_libs/datatables-binding-0.33/datatables.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -280,20 +289,90 @@ window.Quarto = {
 </section>
 <section id="descriptive-analysis-charting-new-territory" class="level3">
 <h3 class="anchored" data-anchor-id="descriptive-analysis-charting-new-territory">Descriptive analysis: charting new territory</h3>
-<p>In some cases, description and quantification of a phenomenon might itself satisfy your immediate research question. This is often the case when description alone is a considerable challenge, such as when a dataset is especially large or complex, and a dimensionality-reduction technique is needed to make sense of the data.</p>
-<p>In genetics research, for example, researchers characterize cell samples based on the cells’ different transcription profiles across thousands or tens of thousands of different genes. To achieve a working description of their complex sample data, biologists will use exploratory techniques like principal components analysis (PCA) to organize cell samples based on variance in their gene expression patterns, aiming to group together cells that express similar gene profiles <span class="citation" data-cites="marypiper20237723318">(see <a href="references.html#ref-marypiper20237723318" role="doc-biblioref">Piper et al. 2023</a> for a basic tutorial)</span>.</p>
+<p>In some cases, description and quantification of a phenomenon might itself satisfy your immediate research question. This is often the case when description alone is a considerable challenge, such as when a dataset is especially large or complex. The toolbox of descriptive analysis includes many techniques for summarizing and organizing a dataset to reveal its structure in human-readable terms.</p>
+<section id="initial-description-summary-statistics-and-distribution-visualizations" class="level4">
+<h4 class="anchored" data-anchor-id="initial-description-summary-statistics-and-distribution-visualizations">Initial description: summary statistics and distribution visualizations</h4>
+<p>Let’s use an example dataset from the <code>datasets</code> package in R to illustrate some of these descriptive analyses in action. The <code>attitude</code> dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. Each row of the data frame corresponds to one department, and the values in each column are the percent of favorable responses to each question from across employees sampled in a given department. The dataset is previewed in <a href="#tbl-attitude_example_setup" class="quarto-xref">Table&nbsp;<span>1.1</span></a> (I’ve renamed the variables based on the <a href="https://rdrr.io/r/datasets/attitude.html">documentation</a> for interpretability).</p>
+<div class="cell">
+<div id="tbl-attitude_example_setup" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-attitude_example_setup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1
+</figcaption>
+<div aria-describedby="tbl-attitude_example_setup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="htmlwidget-b3ee48cbd702acef1844" style="width:1200px;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b3ee48cbd702acef1844">{"x":{"filter":"none","vertical":false,"caption":"<caption>Direct preview of the Chatterjee-Price attitude survey data.<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"],[43,63,71,61,81,43,58,71,72,67,64,67,69,68,77,81,74,65,65,50,50,64,53,40,63,66,78,48,85,82],[51,64,70,63,78,55,67,75,82,61,53,60,62,83,77,90,85,60,70,58,40,61,66,37,54,77,75,57,85,82],[30,51,68,45,56,49,42,50,72,45,53,47,57,83,54,50,64,65,46,68,33,52,52,42,42,66,58,44,71,39],[39,54,69,47,66,44,56,55,67,47,58,39,42,45,72,72,69,75,57,54,34,62,50,58,48,63,74,45,71,59],[61,63,76,54,71,54,66,70,71,62,58,59,55,59,79,60,79,55,75,64,43,66,63,50,66,88,80,51,77,64],[92,73,86,84,83,49,68,66,83,80,67,74,63,77,77,54,79,80,85,78,64,80,80,57,75,76,78,83,74,78],[45,47,48,35,47,34,35,41,31,41,34,41,25,35,46,36,63,60,46,52,33,41,37,49,33,72,49,38,55,39]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Overall rating<\/th>\n      <th>Handling of employee complaints<\/th>\n      <th>Does not allow special privileges<\/th>\n      <th>Opportunity to learn<\/th>\n      <th>Raises based on performance<\/th>\n      <th>Too critical<\/th>\n      <th>Advancement<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Overall rating","targets":1},{"name":"Handling of employee complaints","targets":2},{"name":"Does not allow special privileges","targets":3},{"name":"Opportunity to learn","targets":4},{"name":"Raises based on performance","targets":5},{"name":"Too critical","targets":6},{"name":"Advancement","targets":7}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>As a first step in organizing these data to understand them better, we typically compute <em>summary statistics</em>: metrics that help characterize the distributions of our variables. These are generally metrics indicating the location (mean, median, etc.) and dispersion (standard deviation, quartile range, etc.) of a given variable’s distribution. <a href="#tbl-attitude_example_table" class="quarto-xref">Table&nbsp;<span>1.2</span></a> is an example summary table for our employee attitude data (computed using the <code>sumtable()</code> function from the <code>vtable</code> package in R):</p>
+<div class="cell">
+<div id="tbl-attitude_example_table" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-attitude_example_table-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.2
+</figcaption>
+<div aria-describedby="tbl-attitude_example_table-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="htmlwidget-2e67c61d31ece8bdc92d" style="width:1000px;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2e67c61d31ece8bdc92d">{"x":{"filter":"none","vertical":false,"caption":"<caption>Summary statistics table for attitude dataset by variable.<\/caption>","data":[["1","2","3","4","5","6","7"],["Overall rating","Handling of employee complaints","Does not allow special privileges","Opportunity to learn","Raises based on performance","Too critical","Advancement"],["30","30","30","30","30","30","30"],["65","67","53","56","65","75","43"],["12","13","12","12","10","9.9","10"],["40","37","30","34","43","49","25"],["59","58","45","47","58","69","35"],["72","77","62","67","71","80","48"],["85","90","83","75","88","92","72"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variable<\/th>\n      <th>N<\/th>\n      <th>Mean<\/th>\n      <th>Std. Dev.<\/th>\n      <th>Min<\/th>\n      <th>Pctl. 25<\/th>\n      <th>Pctl. 75<\/th>\n      <th>Max<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Variable","targets":1},{"name":"N","targets":2},{"name":"Mean","targets":3},{"name":"Std. Dev.","targets":4},{"name":"Min","targets":5},{"name":"Pctl. 25","targets":6},{"name":"Pctl. 75","targets":7},{"name":"Max","targets":8}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>These summary metrics are already an improvement over the raw data alone in our attempt to characterize the data, but we can do much better by adding visualizations. Even simple descriptive visualizations like the histograms shown in <a href="#fig-attitude_example_hist" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> can help give us a better impression of each of the distributions in the data.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-attitude_example_hist" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-attitude_example_hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="hypothesis_generation_files/figure-html/fig-attitude_example_hist-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-attitude_example_hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Histograms of variable distributions in attitude survey dataset.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="complex-description-multivariate-exploratory-analyses" class="level4">
+<h4 class="anchored" data-anchor-id="complex-description-multivariate-exploratory-analyses">Complex description: multivariate exploratory analyses</h4>
+<p>Now that we have a better understanding of the individual distributions of each variable, we can use more complex descriptive tools to look at the relationships among the variables, describing the phenomenon more fully. For example, we might compute the relative similarities between each variable and visualize those relationships using tools like cluster analysis, often in conjunction with dimensionality-reduction techniques.</p>
+<p>Below is an example of these more advanced exploratory methods applied our attitude data. For this example, we have invented three categories for the variables in the data: “General” for the items “Overall rating” and “Too critical”, “Management” for the items “Handling of employee complaints” and “Does not allow special privileges”, and “Growth” for the items “Opportunity to learn”, “Raises based on performance”, and “Advancement”. With this category structure in our data, we can combine two techniques to see whether the multivariate relationships in the data reflect the expected category structure. The first technique is multidimensional scaling (MDS), which allows us to embed the relationships between all the variables in a 2-dimensional scatter plot for easy visualization. The second technique is a type of machine learning classification method called support vector machine (SVM) classification, which will try to place the variables into categories based on the relationships in the data. <span class="citation" data-cites="mair2022">(see <a href="references.html#ref-mair2022" role="doc-biblioref">Mair, Cetron, and Borg 2022</a> for a tutorial paper on the combined use of these two methods.)</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-attitude_example_svmmds" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-attitude_example_svmmds-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="hypothesis_generation_files/figure-html/fig-attitude_example_svmmds-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-attitude_example_svmmds-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Exploratory classification analysis plot showing multidimensional scaling (MDS) used together with support vector machine (SVM) classification on our modified attitude example data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-attitude_example_svmmds" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> shows the results of the exploratory MDS/SVM analysis. The color-coded regions reflect the SVM classifier’s predicted category assignments, and the point shapes represent the actual category assignments. As we can see, the data align somewhat well with the expected categories, although not perfectly—the classifier places “Overall rating” and “Opportunity to learn” incorrectly into the “Management” category, due to apparent similarities between those variables and the other “Management” variables.</p>
+<p>Multivariate exploratory methods like these can also be used to reveal structures in the data that are not necessarily known in advance, and often in much larger datasets. In genetics research, for example, researchers will characterize cell samples based on the cells’ different transcription profiles across thousands or tens of thousands of different genes, hoping to identify sensible structures through exploratory analyses. To achieve a working description of their complex sample data, biologists will use techniques like principal components analysis (PCA) to organize cell samples based on variance in their gene expression patterns, aiming to group together cells that express similar gene profiles <span class="citation" data-cites="marypiper20237723318">(see <a href="references.html#ref-marypiper20237723318" role="doc-biblioref">Piper et al. 2023</a> for a basic tutorial)</span>.</p>
 <div id="fig-gene_pca" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gene_pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="images/pollen2014_pca_fig.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gene_pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: PCA in genetics research
+Figure&nbsp;1.3: PCA in genetics research
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-gene_pca" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> shows an example of this analysis in action in a genetics paper from <span class="citation" data-cites="pollen2014">Pollen et al. (<a href="references.html#ref-pollen2014" role="doc-biblioref">2014</a>)</span> (this figure is discussed as an example in <a href="https://www.youtube.com/watch?v=_UVHneBUBW0">this</a> tutorial video). In this example, PCA is used to differentiate cell types based on gene transcription heterogeneity.</p>
-<p>PCA and other tools for dimensionality reduction such as multidimensional scaling (MDS) are increasingly helpful descriptive methods as the current era of “big data” grows to encompass more and more scientific fields. These methods can additionally be used in combination with categorization and clustering tools—for example, support vector machine (SVM) classifiers <span class="citation" data-cites="mair2022">(see <a href="references.html#ref-mair2022" role="doc-biblioref">Mair, Cetron, and Borg 2022</a> for a tutorial paper)</span>—to make complex, feature-rich data more approachable and provide a launchpad for the generation of hypotheses.</p>
+<p><a href="#fig-gene_pca" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> shows an example of this analysis in action in a genetics paper from <span class="citation" data-cites="pollen2014">Pollen et al. (<a href="references.html#ref-pollen2014" role="doc-biblioref">2014</a>)</span> (this figure is discussed as an example in <a href="https://www.youtube.com/watch?v=_UVHneBUBW0">this</a> tutorial video). In this example, PCA is used to differentiate cell types based on gene transcription heterogeneity.</p>
+<p>Methods like PCA, MDS, SVM classification, and other similar techniques are powerful descriptive methods for the current era of “big data”, which continues to grow and encompass more and more scientific fields. These methods can help make complex, feature-rich data more approachable and provide a launchpad for the generation of hypotheses.</p>
+</section>
 </section>
 <section id="from-description-to-hypothesis" class="level3">
 <h3 class="anchored" data-anchor-id="from-description-to-hypothesis">From description to hypothesis</h3>

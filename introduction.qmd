@@ -1,10 +1,10 @@
 # Introduction {.unnumbered}
 
-<div style="float: right; position: relative; top: 0px; padding: 10px; width: 20%">
+::: {style="float: right; position: relative; top: 0px; padding: 10px; width: 20%"}
 ![](images/Preregistered_large_color_(vector).svg)
-</div>
+:::
 
-Preregistration has become an important standard in social science research to protect the researcher and the broader scientific community from engaging in questionable research practices [@john2012; @nosek2018]. Such practices can include the p-hacking of statistical tests [@simmons2011], hypothesizing after the results are known [referred to as *HARKing*, see @kerr1998], and the cherry-picking of data, variables, or statistically significant results. By preregistering your methods, sample, and analysis plan before conducting a new study, you maintain a level of transparency in your research workflow that helps reduce the *researcher degrees of freedom* [@simmons2011]---excessive flexibility in your research workflow---that can intentionally or inadvertently enable these problematic practices to persist.
+Preregistration has become an important standard in social science research to protect the researcher and the broader scientific community from engaging in research practices that introduce systemic bias into the research process [@john2012; @lakens; @nosek2018]. Such practices can include the p-hacking of statistical tests [@simmons2011], hypothesizing after the results are known [referred to as *HARKing*, see @kerr1998], and the cherry-picking of data, variables, or statistically significant results. By preregistering your methods, sample, and analysis plan before conducting a new study, you maintain a level of transparency in your research workflow that helps reduce the *researcher degrees of freedom* [@simmons2011]---excessive flexibility in your research workflow---that can intentionally or inadvertently enable these problematic practices to persist.
 
 Nevertheless, there are parts of a new study that can be challenging to define in advance. If your new study is taking first steps into uncharted scientific waters, you may not be able to know which statistical analysis or model class will be best suited to your data until you have the data in hand. In these situations, preregistration can feel like an obstacle: you can't proceed to data collection without stating your intended analysis plan, but you can't formalize your analysis plan without data-dependent information. So, is preregistration still a helpful practice here?
 

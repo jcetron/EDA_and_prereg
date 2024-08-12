@@ -22,15 +22,19 @@ In some cases, description and quantification of a phenomenon might itself satis
 
 #### Initial description: summary statistics and distribution visualizations
 
-Let's use an example dataset from the `datasets` package in R to illustrate some of these descriptive analyses in action. The `attitude` dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. Each row of the data frame corresponds to one department, and the values in each column are the percent of favorable responses to each question from across employees sampled in a given department. The dataset is previewed in @tbl-attitude_example_setup (I've renamed the variables based on the [documentation](https://rdrr.io/r/datasets/attitude.html) for interpretability).
+Let's use an example dataset from the `datasets` package in R to illustrate some of these descriptive analyses in action. The `attitude` dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. Each row of the data frame corresponds to one department, and the values in each column are the percent of favorable responses to each question from across employees sampled in a given department. The dataset is previewed in @tbl-attitude_example_data (I've renamed the variables based on the [documentation](https://rdrr.io/r/datasets/attitude.html) for interpretability).
 
-```{r tbl-attitude_example_setup, message=FALSE}
+```{r attitude_example_setup, echo=FALSE, message=FALSE}
+# This code loads packages and sets up default options for tables.
+#  It is not visible in the html render of the tutorial, but is
+#  openly accessible in the source code for the notebook.
+
 # The pacman package is useful for loading and installing packages more efficiently
 require(pacman)
 
 # p_load() is a loading and installing function from pacman that we will use throughout
 #  example code to load any packages used in these examples
-p_load(tidyverse, ggplot2, ggdist, scales, vtable, kableExtra, DT)
+p_load(tidyverse, ggplot2, ggdist, scales, vtable, kableExtra, DT, smacof)
 
 # Configure some options for rendering interactive tables
 options(DT.options = list(
@@ -49,7 +53,9 @@ options(DT.options = list(
   )
   )
 )
+```
 
+```{r tbl-attitude_example_data, message=FALSE}
 # Load attitude data
 data("attitude")
 

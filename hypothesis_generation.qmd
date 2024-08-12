@@ -21,9 +21,6 @@ The principle of separating exploratory and confirmatory research into distinct 
 In some cases, description and quantification of a phenomenon might itself satisfy your immediate research question. This is often the case when description alone is a considerable challenge, such as when a dataset is especially large or complex. The toolbox of descriptive analysis includes many techniques for summarizing and organizing a dataset to reveal its structure in human-readable terms. 
 
 #### Initial description: summary statistics and distribution visualizations
-
-Let's use an example dataset from the `datasets` package in R to illustrate some of these descriptive analyses in action. The `attitude` dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. Each row of the data frame corresponds to one department, and the values in each column are the percent of favorable responses to each question from across employees sampled in a given department. The dataset is previewed in @tbl-attitude_example_data (I've renamed the variables based on the [documentation](https://rdrr.io/r/datasets/attitude.html) for interpretability).
-
 ```{r attitude_example_setup, echo=FALSE, message=FALSE}
 # This code loads packages and sets up default options for tables.
 #  It is not visible in the html render of the tutorial, but is
@@ -45,7 +42,7 @@ options(DT.options = list(
   paging = FALSE,
   initComplete = JS(
                    "function(settings, json) {",
-                      "$('table').css({'font-size': '75%'});",
+                      "$('table').css({'font-size': '85%'});",
                        "}"
                    ),
   buttons = list(
@@ -55,29 +52,36 @@ options(DT.options = list(
 )
 ```
 
+Let's use an example dataset from the `datasets` package in R to illustrate some of these descriptive analyses in action.  
+
+The `attitude` dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. These topic questions are organized into 7 variables, shown and described in @tbl-attitude_varnames_md (descriptions derived from the dataset's [documentation](https://rdrr.io/r/datasets/attitude.html)).
+
+|Variable|Item description|
+|:--:|:---|
+|`rating`|Overall rating|
+|`complaints`|Handling of employee complaints|
+|`privileges`|Does not allow special privileges|
+|`learning`|Opportunity to learn|
+|`raises`|Raises based on performance|
+|`critical`|Too critical|
+|`advance`|Advancement|
+: {#tbl-attitude_varnames_md}
+
+The complete `attitude` dataset is rendered in @tbl-attitude_example_data. Each row of the data frame corresponds to one of the organization's departments, and the values in each column are the percentages of favorable responses to each topic question given by the employees sampled in a given department. 
+
 ```{r tbl-attitude_example_data, message=FALSE}
 # Load attitude data
 data("attitude")
 
-# Rename using full variable names from help file
-attitude_varnames_full <- c('Overall rating',
-                            'Handling of employee complaints',
-                            'Does not allow special privileges',
-                            'Opportunity to learn',
-                            'Raises based on performance',
-                            'Too critical',
-                            'Advancement')
-colnames(attitude) <- attitude_varnames_full
-
 # Data preview
 datatable(attitude,
-          width = 1000,
           caption = htmltools::tags$caption(
             style = 'caption-side: bottom; text-align: left;',
             'Direct preview of the Chatterjee-Price attitude survey data.'
             ),
           )
 ```
+
 
 As a first step in organizing these data to understand them better, we typically compute *summary statistics*: metrics that help characterize the distributions of our variables. These are generally metrics indicating the location (mean, median, etc.) and dispersion (standard deviation, quartile range, etc.) of a given variable's distribution. @tbl-attitude_example_table is an example summary table for our employee attitude data (computed using the `sumtable()` function from the `vtable` package in R):
 
@@ -98,7 +102,7 @@ These summary metrics are already an improvement over the raw data alone in our 
 # Plot of all variable histograms in separate panels (facets)
 ggplot(data = attitude %>%
          pivot_longer(cols = everything()) %>%
-         mutate(`Survey item` = factor(name, levels = attitude_varnames_full))) +
+         mutate(`Survey item` = factor(name, levels = colnames(attitude)))) +
   geom_histogram(aes(x = value, color = `Survey item`, fill = `Survey item`)) +
   xlab('Proportion of favorable responses per department (%)') +
   ggtitle('Histograms of each survey item') + 
@@ -111,7 +115,7 @@ Histograms are great for visualizing individual distributions one at a time, but
 # Combined plot of distributions visualized across multiple methods at once
 ggplot(data = attitude %>%
          pivot_longer(cols = everything()) %>%
-         mutate(`Survey item` = factor(name, levels = attitude_varnames_full)),
+         mutate(`Survey item` = factor(name, levels = colnames(attitude))),
        aes(x = `Survey item`, y = value, fill = `Survey item`)) +
   stat_halfeye(alpha = .8, adjust = .5, justification = -.2) +
   geom_boxplot(width = .2) +

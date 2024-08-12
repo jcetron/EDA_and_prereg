@@ -123,6 +123,7 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
 <script src="site_libs/datatables-binding-0.33/datatables.js"></script>
@@ -132,7 +133,6 @@ div.csl-indent {
 <script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
 <link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
 <script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
-<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -327,47 +327,85 @@ window.Quarto = {
 <p>In some cases, description and quantification of a phenomenon might itself satisfy your immediate research question. This is often the case when description alone is a considerable challenge, such as when a dataset is especially large or complex. The toolbox of descriptive analysis includes many techniques for summarizing and organizing a dataset to reveal its structure in human-readable terms.</p>
 <section id="initial-description-summary-statistics-and-distribution-visualizations" class="level4">
 <h4 class="anchored" data-anchor-id="initial-description-summary-statistics-and-distribution-visualizations">Initial description: summary statistics and distribution visualizations</h4>
-<p>Let’s use an example dataset from the <code>datasets</code> package in R to illustrate some of these descriptive analyses in action. The <code>attitude</code> dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. Each row of the data frame corresponds to one department, and the values in each column are the percent of favorable responses to each question from across employees sampled in a given department. The dataset is previewed in <a href="#tbl-attitude_example_data" class="quarto-xref">Table&nbsp;<span>1.1</span></a> (I’ve renamed the variables based on the <a href="https://rdrr.io/r/datasets/attitude.html">documentation</a> for interpretability).</p>
+<p>Let’s use an example dataset from the <code>datasets</code> package in R to illustrate some of these descriptive analyses in action.</p>
+<p>The <code>attitude</code> dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. These topic questions are organized into 7 variables, shown and described in <a href="#tbl-attitude_varnames_md" class="quarto-xref">Table&nbsp;<span>1.1</span></a> (descriptions derived from the dataset’s <a href="https://rdrr.io/r/datasets/attitude.html">documentation</a>).</p>
+<div id="tbl-attitude_varnames_md" class="quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-attitude_varnames_md-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1
+</figcaption>
+<div aria-describedby="tbl-attitude_varnames_md-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Variable</th>
+<th style="text-align: left;">Item description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>rating</code></td>
+<td style="text-align: left;">Overall rating</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>complaints</code></td>
+<td style="text-align: left;">Handling of employee complaints</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>privileges</code></td>
+<td style="text-align: left;">Does not allow special privileges</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>learning</code></td>
+<td style="text-align: left;">Opportunity to learn</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>raises</code></td>
+<td style="text-align: left;">Raises based on performance</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>critical</code></td>
+<td style="text-align: left;">Too critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>advance</code></td>
+<td style="text-align: left;">Advancement</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The complete <code>attitude</code> dataset is rendered in <a href="#tbl-attitude_example_data" class="quarto-xref">Table&nbsp;<span>1.2</span></a>. Each row of the data frame corresponds to one of the organization’s departments, and the values in each column are the percentages of favorable responses to each topic question given by the employees sampled in a given department.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load attitude data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"attitude"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename using full variable names from help file</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>attitude_varnames_full <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Overall rating'</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'Handling of employee complaints'</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'Does not allow special privileges'</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'Opportunity to learn'</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'Raises based on performance'</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'Too critical'</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'Advancement'</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(attitude) <span class="ot">&lt;-</span> attitude_varnames_full</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Data preview</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(attitude,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">width =</span> <span class="dv">1000</span>,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> htmltools<span class="sc">::</span>tags<span class="sc">$</span><span class="fu">caption</span>(</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">style =</span> <span class="st">'caption-side: bottom; text-align: left;'</span>,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Direct preview of the Chatterjee-Price attitude survey data.'</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>            ),</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Data preview</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(attitude,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> htmltools<span class="sc">::</span>tags<span class="sc">$</span><span class="fu">caption</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">style =</span> <span class="st">'caption-side: bottom; text-align: left;'</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Direct preview of the Chatterjee-Price attitude survey data.'</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="tbl-attitude_example_data" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-attitude_example_data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.1
+Table&nbsp;1.2
 </figcaption>
 <div aria-describedby="tbl-attitude_example_data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="htmlwidget-98e45a375563ade7b869" style="width:1000px;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-98e45a375563ade7b869">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: bottom; text-align: left;\">Direct preview of the Chatterjee-Price attitude survey data.<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"],[43,63,71,61,81,43,58,71,72,67,64,67,69,68,77,81,74,65,65,50,50,64,53,40,63,66,78,48,85,82],[51,64,70,63,78,55,67,75,82,61,53,60,62,83,77,90,85,60,70,58,40,61,66,37,54,77,75,57,85,82],[30,51,68,45,56,49,42,50,72,45,53,47,57,83,54,50,64,65,46,68,33,52,52,42,42,66,58,44,71,39],[39,54,69,47,66,44,56,55,67,47,58,39,42,45,72,72,69,75,57,54,34,62,50,58,48,63,74,45,71,59],[61,63,76,54,71,54,66,70,71,62,58,59,55,59,79,60,79,55,75,64,43,66,63,50,66,88,80,51,77,64],[92,73,86,84,83,49,68,66,83,80,67,74,63,77,77,54,79,80,85,78,64,80,80,57,75,76,78,83,74,78],[45,47,48,35,47,34,35,41,31,41,34,41,25,35,46,36,63,60,46,52,33,41,37,49,33,72,49,38,55,39]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Overall rating<\/th>\n      <th>Handling of employee complaints<\/th>\n      <th>Does not allow special privileges<\/th>\n      <th>Opportunity to learn<\/th>\n      <th>Raises based on performance<\/th>\n      <th>Too critical<\/th>\n      <th>Advancement<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"tr","autoWidth":true,"scrollY":400,"scrollCollapse":true,"paging":false,"initComplete":"function(settings, json) {\n$('table').css({'font-size': '75%'});\n}","buttons":[],"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Overall rating","targets":1},{"name":"Handling of employee complaints","targets":2},{"name":"Does not allow special privileges","targets":3},{"name":"Opportunity to learn","targets":4},{"name":"Raises based on performance","targets":5},{"name":"Too critical","targets":6},{"name":"Advancement","targets":7}],"order":[],"orderClasses":false}},"evals":["options.initComplete"],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-eed1d440173b2e82abbc" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-eed1d440173b2e82abbc">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: bottom; text-align: left;\">Direct preview of the Chatterjee-Price attitude survey data.<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"],[43,63,71,61,81,43,58,71,72,67,64,67,69,68,77,81,74,65,65,50,50,64,53,40,63,66,78,48,85,82],[51,64,70,63,78,55,67,75,82,61,53,60,62,83,77,90,85,60,70,58,40,61,66,37,54,77,75,57,85,82],[30,51,68,45,56,49,42,50,72,45,53,47,57,83,54,50,64,65,46,68,33,52,52,42,42,66,58,44,71,39],[39,54,69,47,66,44,56,55,67,47,58,39,42,45,72,72,69,75,57,54,34,62,50,58,48,63,74,45,71,59],[61,63,76,54,71,54,66,70,71,62,58,59,55,59,79,60,79,55,75,64,43,66,63,50,66,88,80,51,77,64],[92,73,86,84,83,49,68,66,83,80,67,74,63,77,77,54,79,80,85,78,64,80,80,57,75,76,78,83,74,78],[45,47,48,35,47,34,35,41,31,41,34,41,25,35,46,36,63,60,46,52,33,41,37,49,33,72,49,38,55,39]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>rating<\/th>\n      <th>complaints<\/th>\n      <th>privileges<\/th>\n      <th>learning<\/th>\n      <th>raises<\/th>\n      <th>critical<\/th>\n      <th>advance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"tr","autoWidth":true,"scrollY":400,"scrollCollapse":true,"paging":false,"initComplete":"function(settings, json) {\n$('table').css({'font-size': '85%'});\n}","buttons":[],"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"rating","targets":1},{"name":"complaints","targets":2},{"name":"privileges","targets":3},{"name":"learning","targets":4},{"name":"raises","targets":5},{"name":"critical","targets":6},{"name":"advance","targets":7}],"order":[],"orderClasses":false}},"evals":["options.initComplete"],"jsHooks":[]}</script>
 </div>
 </div>
 </figure>
 </div>
 </div>
-<p>As a first step in organizing these data to understand them better, we typically compute <em>summary statistics</em>: metrics that help characterize the distributions of our variables. These are generally metrics indicating the location (mean, median, etc.) and dispersion (standard deviation, quartile range, etc.) of a given variable’s distribution. <a href="#tbl-attitude_example_table" class="quarto-xref">Table&nbsp;<span>1.2</span></a> is an example summary table for our employee attitude data (computed using the <code>sumtable()</code> function from the <code>vtable</code> package in R):</p>
+<p>As a first step in organizing these data to understand them better, we typically compute <em>summary statistics</em>: metrics that help characterize the distributions of our variables. These are generally metrics indicating the location (mean, median, etc.) and dispersion (standard deviation, quartile range, etc.) of a given variable’s distribution. <a href="#tbl-attitude_example_table" class="quarto-xref">Table&nbsp;<span>1.3</span></a> is an example summary table for our employee attitude data (computed using the <code>sumtable()</code> function from the <code>vtable</code> package in R):</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -382,12 +420,12 @@ Table&nbsp;1.1
 <div id="tbl-attitude_example_table" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-attitude_example_table-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.2
+Table&nbsp;1.3
 </figcaption>
 <div aria-describedby="tbl-attitude_example_table-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-e976eda120228a8ee9f6" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-e976eda120228a8ee9f6">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: bottom; text-align: left;\">Summary statistics table for attitude dataset by variable.<\/caption>","data":[["1","2","3","4","5","6","7"],["Overall rating","Handling of employee complaints","Does not allow special privileges","Opportunity to learn","Raises based on performance","Too critical","Advancement"],["30","30","30","30","30","30","30"],["65","67","53","56","65","75","43"],["12","13","12","12","10","9.9","10"],["40","37","30","34","43","49","25"],["59","58","45","47","58","69","35"],["72","77","62","67","71","80","48"],["85","90","83","75","88","92","72"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variable<\/th>\n      <th>N<\/th>\n      <th>Mean<\/th>\n      <th>Std. Dev.<\/th>\n      <th>Min<\/th>\n      <th>Pctl. 25<\/th>\n      <th>Pctl. 75<\/th>\n      <th>Max<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"tr","autoWidth":true,"scrollY":400,"scrollCollapse":true,"paging":false,"initComplete":"function(settings, json) {\n$('table').css({'font-size': '75%'});\n}","buttons":[],"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Variable","targets":1},{"name":"N","targets":2},{"name":"Mean","targets":3},{"name":"Std. Dev.","targets":4},{"name":"Min","targets":5},{"name":"Pctl. 25","targets":6},{"name":"Pctl. 75","targets":7},{"name":"Max","targets":8}],"order":[],"orderClasses":false}},"evals":["options.initComplete"],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-5282e8dae3048e565bad" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-5282e8dae3048e565bad">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: bottom; text-align: left;\">Summary statistics table for attitude dataset by variable.<\/caption>","data":[["1","2","3","4","5","6","7"],["rating","complaints","privileges","learning","raises","critical","advance"],["30","30","30","30","30","30","30"],["65","67","53","56","65","75","43"],["12","13","12","12","10","9.9","10"],["40","37","30","34","43","49","25"],["59","58","45","47","58","69","35"],["72","77","62","67","71","80","48"],["85","90","83","75","88","92","72"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Variable<\/th>\n      <th>N<\/th>\n      <th>Mean<\/th>\n      <th>Std. Dev.<\/th>\n      <th>Min<\/th>\n      <th>Pctl. 25<\/th>\n      <th>Pctl. 75<\/th>\n      <th>Max<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"tr","autoWidth":true,"scrollY":400,"scrollCollapse":true,"paging":false,"initComplete":"function(settings, json) {\n$('table').css({'font-size': '85%'});\n}","buttons":[],"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Variable","targets":1},{"name":"N","targets":2},{"name":"Mean","targets":3},{"name":"Std. Dev.","targets":4},{"name":"Min","targets":5},{"name":"Pctl. 25","targets":6},{"name":"Pctl. 75","targets":7},{"name":"Max","targets":8}],"order":[],"orderClasses":false}},"evals":["options.initComplete"],"jsHooks":[]}</script>
 </div>
 </div>
 </figure>
@@ -400,7 +438,7 @@ Table&nbsp;1.2
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot of all variable histograms in separate panels (facets)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> attitude <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Survey item</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">factor</span>(name, <span class="at">levels =</span> attitude_varnames_full))) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Survey item</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">factor</span>(name, <span class="at">levels =</span> <span class="fu">colnames</span>(attitude)))) <span class="sc">+</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">color =</span> <span class="st">`</span><span class="at">Survey item</span><span class="st">`</span>, <span class="at">fill =</span> <span class="st">`</span><span class="at">Survey item</span><span class="st">`</span>)) <span class="sc">+</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">'Proportion of favorable responses per department (%)'</span>) <span class="sc">+</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">'Histograms of each survey item'</span>) <span class="sc">+</span> </span>
@@ -427,7 +465,7 @@ Figure&nbsp;1.1: Histograms of variable distributions in attitude survey dataset
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combined plot of distributions visualized across multiple methods at once</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> attitude <span class="sc">%&gt;%</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Survey item</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">factor</span>(name, <span class="at">levels =</span> attitude_varnames_full)),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Survey item</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">factor</span>(name, <span class="at">levels =</span> <span class="fu">colnames</span>(attitude))),</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Survey item</span><span class="st">`</span>, <span class="at">y =</span> value, <span class="at">fill =</span> <span class="st">`</span><span class="at">Survey item</span><span class="st">`</span>)) <span class="sc">+</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>(<span class="at">alpha =</span> .<span class="dv">8</span>, <span class="at">adjust =</span> .<span class="dv">5</span>, <span class="at">justification =</span> <span class="sc">-</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>

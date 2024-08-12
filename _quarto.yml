@@ -40,6 +40,7 @@ format:
     callout-appearance: simple
     code-fold: true
     code-summary: "Show code"
+    tbl-cap-location: top
 
 execute:
   freeze: auto

@@ -38,6 +38,8 @@ format:
       light: cosmo
     code-link: true
     callout-appearance: simple
+    code-fold: true
+    code-summary: "Show code"
 
 execute:
   freeze: auto

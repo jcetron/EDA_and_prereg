@@ -24,14 +24,36 @@ In some cases, description and quantification of a phenomenon might itself satis
 
 Let's use an example dataset from the `datasets` package in R to illustrate some of these descriptive analyses in action. The `attitude` dataset contains aggregated data from the Chatterjee-Price attitude survey, in which clerical employees across 30 departments of a large organization were asked to evaluate their employers on a series of topics. Each row of the data frame corresponds to one department, and the values in each column are the percent of favorable responses to each question from across employees sampled in a given department. The dataset is previewed in @tbl-attitude_example_setup (I've renamed the variables based on the [documentation](https://rdrr.io/r/datasets/attitude.html) for interpretability).
 
-```{r tbl-attitude_example_setup, echo=FALSE, message=FALSE}
+```{r tbl-attitude_example_setup, message=FALSE}
+# The pacman package is useful for loading and installing packages more efficiently
 require(pacman)
-p_load(tidyverse, ggplot2, vtable, kableExtra, DT)
 
-# load attitude data
+# p_load() is a loading and installing function from pacman that we will use throughout
+#  example code to load any packages used in these examples
+p_load(tidyverse, ggplot2, ggdist, scales, vtable, kableExtra, DT)
+
+# Configure some options for rendering interactive tables
+options(DT.options = list(
+  dom = 'tr',
+  autoWidth = TRUE,
+  scrollY = 400,
+  scrollCollapse = TRUE,
+  paging = FALSE,
+  initComplete = JS(
+                   "function(settings, json) {",
+                      "$('table').css({'font-size': '75%'});",
+                       "}"
+                   ),
+  buttons = list(
+    
+  )
+  )
+)
+
+# Load attitude data
 data("attitude")
 
-# rename using full variable names from help file
+# Rename using full variable names from help file
 attitude_varnames_full <- c('Overall rating',
                             'Handling of employee complaints',
                             'Does not allow special privileges',
@@ -41,59 +63,94 @@ attitude_varnames_full <- c('Overall rating',
                             'Advancement')
 colnames(attitude) <- attitude_varnames_full
 
-# data preview
-#kable(head(attitude), format = 'html')
-datatable(attitude, width = 1200, caption = "Direct preview of the Chatterjee-Price attitude survey data.")
+# Data preview
+datatable(attitude,
+          width = 1000,
+          caption = htmltools::tags$caption(
+            style = 'caption-side: bottom; text-align: left;',
+            'Direct preview of the Chatterjee-Price attitude survey data.'
+            ),
+          )
 ```
 
 As a first step in organizing these data to understand them better, we typically compute *summary statistics*: metrics that help characterize the distributions of our variables. These are generally metrics indicating the location (mean, median, etc.) and dispersion (standard deviation, quartile range, etc.) of a given variable's distribution. @tbl-attitude_example_table is an example summary table for our employee attitude data (computed using the `sumtable()` function from the `vtable` package in R):
 
-```{r tbl-attitude_example_table, echo=FALSE, message=FALSE}
-sumtable(attitude, out = 'return') %>% datatable(width = 1000, caption = "Summary statistics table for attitude dataset by variable.")
+```{r tbl-attitude_example_table, message=FALSE}
+# Construct summary table using sumtable() and render with datatable()
+sumtable(attitude, out = 'return') %>%
+  datatable(caption = htmltools::tags$caption(
+            style = 'caption-side: bottom; text-align: left;',
+            'Summary statistics table for attitude dataset by variable.'
+            )
+          )
 ```
 
 
 These summary metrics are already an improvement over the raw data alone in our attempt to characterize the data, but we can do much better by adding visualizations. Even simple descriptive visualizations like the histograms shown in @fig-attitude_example_hist can help give us a better impression of each of the distributions in the data.
 
-```{r fig-attitude_example_hist, echo=FALSE, message=FALSE, fig.id=TRUE, fig.cap="Histograms of variable distributions in attitude survey dataset."}
-# plot of all histograms
+```{r fig-attitude_example_hist, message=FALSE, fig.id=TRUE, fig.cap="Histograms of variable distributions in attitude survey dataset."}
+# Plot of all variable histograms in separate panels (facets)
 ggplot(data = attitude %>%
          pivot_longer(cols = everything()) %>%
-         mutate(name = factor(name, levels = attitude_varnames_full))) +
-  geom_histogram(aes(x = value)) +
+         mutate(`Survey item` = factor(name, levels = attitude_varnames_full))) +
+  geom_histogram(aes(x = value, color = `Survey item`, fill = `Survey item`)) +
   xlab('Proportion of favorable responses per department (%)') +
-  ggtitle('Histograms of each variable') + 
-  facet_wrap(~name, ncol = 2)
+  ggtitle('Histograms of each survey item') + 
+  facet_wrap(~`Survey item`, ncol = 3) +
+  theme(legend.position = 'none')
+```
+Histograms are great for visualizing individual distributions one at a time, but we will most likely want to compare the distributions of each survey item to one another. We can use other types of distribution visualizations such as boxplots, violin plots, or variations thereof to plot multiple distributions side by side. @fig-attitude_example_combined_dist shows an example visualizing the same survey items together on a single plot using a combination of boxplots, smoothed histograms, and raw data points. (The tools for generating these plots come from extensions of the `ggplot2` package in R, in particular the `ggdist` package.)
+
+```{r fig-attitude_example_combined_dist, message=FALSE, fig.id=TRUE, fig.cap="Combined descriptive plot visualizing variable distributions using a combination of boxplots, smoothed histograms, and raw data points."}
+# Combined plot of distributions visualized across multiple methods at once
+ggplot(data = attitude %>%
+         pivot_longer(cols = everything()) %>%
+         mutate(`Survey item` = factor(name, levels = attitude_varnames_full)),
+       aes(x = `Survey item`, y = value, fill = `Survey item`)) +
+  stat_halfeye(alpha = .8, adjust = .5, justification = -.2) +
+  geom_boxplot(width = .2) +
+  geom_jitter(width = .05, alpha = .3) +
+  ylab('Proportion of favorable responses per department (%)') +
+  scale_x_discrete(labels = label_wrap(12)) + 
+  ggtitle('Combined visualization plot showing distributions of each survey item') +
+  theme(legend.position = 'none')
 ```
 
 #### Complex description: multivariate exploratory analyses
 
-Now that we have a better understanding of the individual distributions of each variable, we can use more complex descriptive tools to look at the relationships among the variables, describing the phenomenon more fully. For example, we might compute the relative similarities between each variable and visualize those relationships using tools like cluster analysis, often in conjunction with dimensionality-reduction techniques.
+Now that we have visualized the individual distributions of each variable and begun to compare them visually to one another, we can use more complex descriptive tools to quantify and map the relationships among the variables. For example, we might compute the relative similarities between each variable using metrics such as correlation or Euclidean distance, and then characterize and visualize those relationships using tools like cluster analysis and dimensionality-reduction techniques.
 
 Below is an example of these more advanced exploratory methods applied our attitude data. For this example, we have invented three categories for the variables in the data: "General" for the items "Overall rating" and "Too critical", "Management" for the items "Handling of employee complaints" and "Does not allow special privileges", and "Growth" for the items "Opportunity to learn", "Raises based on performance", and "Advancement". With this category structure in our data, we can combine two techniques to see whether the multivariate relationships in the data reflect the expected category structure. The first technique is multidimensional scaling (MDS), which allows us to embed the relationships between all the variables in a 2-dimensional scatter plot for easy visualization. The second technique is a type of machine learning classification method called support vector machine (SVM) classification, which will try to place the variables into categories based on the relationships in the data. [see @mair2022 for a tutorial paper on the combined use of these two methods.]
 
 
-```{r fig-attitude_example_svmmds, echo=FALSE, message=FALSE, fig.id=TRUE, fig.cap="Exploratory classification analysis plot showing multidimensional scaling (MDS) used together with support vector machine (SVM) classification on our modified attitude example data."}
+```{r fig-attitude_example_svmmds, message=FALSE, fig.id=TRUE, fig.cap="Exploratory classification analysis plot showing multidimensional scaling (MDS) used together with support vector machine (SVM) classification on our modified attitude example data."}
+# Load the smacof package which provides tools for MDS and SVM joint analysis
 p_load(smacof)
 
-# create distance matrix for variables
+# Create distance matrix for variables using Euclidean distance (default).
 D <- dist(t(attitude))
 
-# fit MDS
+# Note that transposition of the data frame (using t()) is necessary because dist()
+#  compares each row to each other row, and we want to compare the variables, which
+#  are set up in the columns of a data frame by default.
+
+
+# Fit a 2-dimensional ordinal MDS solution using the distance matrix
 mdsfit <- mds(D, ndim = 2, type = 'ordinal')
 
-# define categories
+# Define categories for the variables
 attitude_categories <- factor(c('General', 'Management', 'Management', 'Growth', 'Growth', 'General', 'Growth'))
 
-# add category information to mds configuration for SVM
+# Add category information to the resultant MDS configuration in preparation for SVM categorization
 attitude_mds_cat <- mdsfit$conf %>%
   as.data.frame() %>%
   mutate(Category = attitude_categories)
 
-# fit SVM (simple example, no tuning)
+# Fit SVM classifier to try and categorize the variables from the MDS solution
+# (we are using a bare-bones example without tuning the SVM)
 svmfit <- svm(Category ~ D1 + D2, data = attitude_mds_cat, kernel = 'linear')
 
-# plot joint svm/mds configuration plot
+# Plot the joint SVM/MDS configuration plot
 svm_mdsplot(mds_object = mdsfit, svm_object = svmfit, class = attitude_categories, inset = c(-.5, .5))
 ```
 
